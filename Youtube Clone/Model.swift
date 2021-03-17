@@ -7,7 +7,14 @@
 
 import Foundation
 
+protocol modelDelegate {
+    
+    func videoFetched(_ video:[Video])
+}
+
 class Model {
+    
+    var delegate:modelDelegate?
     
     func getVideo() {
         // SAVE URL
@@ -27,22 +34,29 @@ class Model {
             if error != nil || data == nil {
                 return
             }
-        do {
-            // Parsing the data to object
-            let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = .iso8601
-            
-            let response = try decoder.decode(Response.self, from: data!)
-            
-            dump(response)
-        }catch{
-            
-        }
+            do {
+                // Parsing the data to object
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                
+                let response = try decoder.decode(Response.self, from: data!)
+                
+                if response.items != nil{
+                    DispatchQueue.main.async {
+                        //                    call the "videoFetched" Method of the delegate
+                        self.delegate?.videoFetched(response.items!)
+                    }
+                }
+                
+                //            dump(response)
+            }catch{
+                
+            }
             
         }
         // Start of the task
         dataTask.resume()
-    
+        
     }
     
 }
