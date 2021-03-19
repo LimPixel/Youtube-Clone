@@ -15,16 +15,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Set itself as dataSource and the delegate
-        tableView.dataSource = self
-        tableView.delegate = self
-        
-        
-        // Set itself as the dataSource and the delegate
-        model.delegate = self
-        
-        model.getVideo()
     }
+    
+    
+    
+    
+    
     
     
     func videoFetched(_ video: [Video]) {
@@ -39,10 +35,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return video.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.VIDEOCELL_ID, for: indexPath)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard tableView.indexPathForSelectedRow != nil else {
+            return
+        }
         
-        let title = self.video[indexPath.row].title
+        let selectedVideo = video[tableView.indexPathForSelectedRow!.row]
+        
+        let detailVC = segue.destination as! DetailViewController
+        
+        detailVC.video = selectedVideo
+        
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.VIDEOCELL_ID, for: indexPath) as! VideoTableViewCell
+        
+        //configure the cell with the data
+        let video = self.video[indexPath.row]
+        
+        cell.setCell(video)
+        
+        
         
         return cell
     }
@@ -51,6 +65,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
     }
     
-
+    
 }
 
