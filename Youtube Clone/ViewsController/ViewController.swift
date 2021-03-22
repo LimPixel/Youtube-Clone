@@ -7,9 +7,10 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, modelDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ModelDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    
     var model = Model()
     var video = [Video]()
     
@@ -17,13 +18,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
     }
     
-    
-    
-    
-    
-    
-    
-    func videoFetched(_ video: [Video]) {
+    func videosFatched(_ video: [Video]) {
         // Set the returned videos to our video property
         self.video = video
         
@@ -36,6 +31,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         guard tableView.indexPathForSelectedRow != nil else {
             return
         }
@@ -55,9 +51,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let video = self.video[indexPath.row]
         
         cell.setCell(video)
-        
-        
-        
+
         return cell
     }
     
